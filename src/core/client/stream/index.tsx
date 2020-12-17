@@ -3,6 +3,7 @@ import React, { FunctionComponent } from "react";
 import ReactDOM from "react-dom";
 
 import { parseQuery } from "coral-common/utils";
+import { injectConditionalPolyfills } from "coral-framework/helpers";
 import { createManaged } from "coral-framework/lib/bootstrap";
 import { createTokenRefreshProvider } from "coral-framework/lib/network/tokenRefreshProvider";
 
@@ -19,6 +20,13 @@ function extractBundleConfig() {
 }
 
 async function main() {
+  const { modal, footer } = parseQuery(location.search);
+  if (modal || footer) {
+    // Load any polyfills that are required.
+    await injectConditionalPolyfills();
+    document.body.style.background = "transparent";
+    return;
+  }
   const pym = new PymChild({
     polling: 100,
   });

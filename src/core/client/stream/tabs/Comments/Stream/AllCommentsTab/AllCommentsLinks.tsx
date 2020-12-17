@@ -1,12 +1,20 @@
 import { Localized } from "@fluent/react/compat";
 import cn from "classnames";
-import React, { FunctionComponent, useCallback } from "react";
+import React, { FunctionComponent, useCallback, useState } from "react";
 
 import { useCoralContext } from "coral-framework/lib/bootstrap";
 import { useMutation } from "coral-framework/lib/relay";
 import { Mutation as SetActiveTabMutation } from "coral-stream/App/SetActiveTabMutation";
 import CLASSES from "coral-stream/classes";
-import { Button, ButtonIcon } from "coral-ui/components/v2";
+import StreamModal from "coral-stream/common/StreamModal";
+import {
+  Button,
+  ButtonIcon,
+  Card,
+  Flex,
+  HorizontalGutter,
+  Typography,
+} from "coral-ui/components/v2";
 
 import styles from "./AllCommentsLinks.css";
 
@@ -53,8 +61,65 @@ const AllCommentsLinks: FunctionComponent<Props> = ({
     disabled: styles.disabled,
   };
 
+  const [showModal, setShowModal] = useState(false);
+  const onShowModal = useCallback(() => {
+    setShowModal(true);
+  }, [setShowModal]);
+  const onHideModal = useCallback(() => {
+    setShowModal(false);
+  }, [setShowModal]);
+
   return (
     <div className={cn(styles.container, CLASSES.streamFooter.$root)}>
+      {showModal && (
+        <StreamModal onClose={onHideModal} open>
+          {({ firstFocusableRef, lastFocusableRef }) => (
+            <Card>
+              <HorizontalGutter size="double">
+                <HorizontalGutter>
+                  <Typography variant="header2">
+                    A modal on the Coral Stream?
+                  </Typography>
+                  <Typography>
+                    Without security, usability, nor customization compromises?
+                    <br />
+                    <i>Amazing!</i>
+                  </Typography>
+                </HorizontalGutter>
+                <Flex justifyContent="flex-end" itemGutter="half">
+                  <Button
+                    color="mono"
+                    variant="outlined"
+                    onClick={onHideModal}
+                    ref={firstFocusableRef}
+                  >
+                    Yes
+                  </Button>
+                  <Button
+                    color="stream"
+                    onClick={onHideModal}
+                    ref={lastFocusableRef}
+                  >
+                    I agree
+                  </Button>
+                </Flex>
+              </HorizontalGutter>
+            </Card>
+          )}
+        </StreamModal>
+      )}
+      <Button
+        className={styles.link}
+        onClick={onShowModal}
+        variant="textUnderlined"
+        color="regular"
+        iconLeft
+        classes={classes}
+        uppercase={false}
+      >
+        <ButtonIcon className={styles.icon}>account_box</ButtonIcon>
+        Show Modal
+      </Button>
       {showGoToProfile && (
         <Button
           className={cn(styles.link, CLASSES.streamFooter.profileLink)}

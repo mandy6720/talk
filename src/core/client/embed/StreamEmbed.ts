@@ -11,6 +11,7 @@ import {
   withClickEvent,
   withConfig,
   withEventEmitter,
+  withFrameActionHandler,
   withIOSSafariWidthWorkaround,
   withKeypressEvent,
   withLiveCommentCount,
@@ -95,6 +96,7 @@ export class StreamEmbed {
       }),
       withKeypressEvent,
       withRefreshAccessToken(config.refreshAccessToken),
+      withFrameActionHandler(config.id),
     ];
 
     const query = stringifyQuery({

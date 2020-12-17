@@ -6,6 +6,7 @@ import { withLocalStateContainer } from "coral-framework/lib/relay";
 import { AppContainerLocal as Local } from "coral-stream/__generated__/AppContainerLocal.graphql";
 
 import App from "./App";
+import { FramesContextProvider } from "./frames";
 import {
   OnEvents,
   OnPostMessageSetAccessToken,
@@ -37,11 +38,11 @@ class AppContainer extends React.Component<Props> {
     } = this.props;
 
     return (
-      <>
+      <FramesContextProvider>
         {this.props.disableListeners ? null : listeners}
         <RefreshTokenHandler />
         <App activeTab={activeTab} />
-      </>
+      </FramesContextProvider>
     );
   }
 }
